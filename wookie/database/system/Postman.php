@@ -1,5 +1,7 @@
 <?php
 
+//mysqli_report(MYSQLI_REPORT_ALL);
+
 class Postman {
 
 	// max time diff
@@ -35,7 +37,7 @@ class Postman {
 			$config = json_decode(file_get_contents('/var/www/database.config'));
 
 			// create connection
-			if(mysqli_real_connect($this->mysqlConnection, $config->aws_1->host, $config->aws_1->user, $config->aws_1->password, 'website', $config->aws_1->port)) {
+			if(mysqli_real_connect($this->mysqlConnection, $config->aws_1->host, $config->aws_1->user, $config->aws_1->password, 'datasecret', $config->aws_1->port)) {
 				mysqli_set_charset( $this->mysqlConnection, $config->aws_1->charset );
 				mysqli_query($this->mysqlConnection, 'SET NAMES ' . $config->aws_1->connection);
 			}
@@ -73,9 +75,10 @@ class Postman {
 
 	function execute($query, $params, $return_insert_idx = false) {
 
-		$stmt = $this->mysqlConnection->stmt_init();
-		$stmt = $this->mysqlConnection->prepare($query);
+		//echo $query;
+		//var_dump($params);
 
+		$stmt = $this->mysqlConnection->prepare($query);
 		$this->db_bind_param($stmt, $params);
 		$result = $stmt->execute();
 
